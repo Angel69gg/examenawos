@@ -7,9 +7,6 @@ app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
 const routes = require('./routes/departamento');
 app.use(routes);
-
-//CORS
-
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
