@@ -5,8 +5,12 @@ const app = express()
 const bodyParser= require('body-parser')
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
-const routes = require('./routes/departamento');
-app.use(routes);
+const routes1 = require('./routes/departamento',);
+const routes2 = require('./routes/empleado',);
+const routes3 = require('./routes/usuario',);
+app.use(routes1);
+app.use(routes2);
+app.use(routes3);
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
