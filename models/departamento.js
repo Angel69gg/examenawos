@@ -9,7 +9,7 @@ type: Schema.Types.ObjectId,
 },
 id_jefe_de_area:{
 type: Schema.Types.ObjectId,
-
+ref: 'empleado'
 },
 nombre:{
     type: String,
