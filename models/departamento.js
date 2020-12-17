@@ -2,11 +2,6 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let departamentoSchema= new Schema ({
-_id: {
-type: Schema.Types.ObjectId,
-
-
-},
 id_jefe_de_area:{
 type: Schema.Types.ObjectId,
 ref: 'empleado'

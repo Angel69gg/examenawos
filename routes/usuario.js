@@ -3,31 +3,40 @@ const app = express()
 const usuario= require('../models/usuario')
 
 
-app.get('/usuario', function (req, res) {
-  usuario.find({}).exec((err,usuario)=>{
-      if(err){
-          return res.status(400).json({
-              ok: false,
-              msg:'ocurrio un error al consultar',
-              err
-          })
-      }
-      res.json ({
-        ok: true,
-        msg: 'lista obtenida con exito',
-        conteo:usuario.length,
-        usuario
-      })
-  })
-})
+app.get('/usuario/:id', (req, res) => {
+
+    let idUsuario = req.params.id;
+  
+    usuario.findById({ _id: idUsuario })
+        .exec((err, usuario) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    msg: 'Ocurrio un error al listar las categorias',
+                    err
+                });
+            }
+  
+            res.json({
+                ok: true,
+                msg: ' listada con exito',
+                conteo: usuario.length,
+                usuario
+            });
+        });
+  
+  });
 app.post('/usuario',function(req,res){
     let body= req.body;
 let usr= new usuario({
-    _id: body._id,
-    id_jefe_de_area:body.id_jefe_de_area,
-    nombre: body.nombre,
-    numero_empleados: body.numero_empleados,
-    extension_telefonica: body.extension_telefonica,
+    
+    nombre:body.nombre,
+    primer_apellido: body.primer_apellido,
+    segundo_apellido: body.segundo_apellido,
+    edad: body.edad,
+    curp: body.curp,
+    telefono:body.telefono,
+    mail: body.mail,
     activo: body.activo
   });
   usr.save((err,usrDB)=>{
@@ -49,7 +58,7 @@ if (err){
 })
 app.put('/usuario/:id', function(req, res) {
   let id = req.params.id;
-  let body = _.pick(req.body, ['descripcion', 'usuario']);
+  let body = _.pick(req.body, ['nombre', 'primer_apellido','segundo_apellido','edad','curp','telefono','mail']);
 
   empleado.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
       (err, usrDB) => {
@@ -70,7 +79,7 @@ app.put('/usuario/:id', function(req, res) {
 app.delete('/usuario/:id', function(req, res) {
 
   let id = req.params.id;
-  usuario.findByIdAndUpdate(id, { disponible: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+  usuario.findByIdAndUpdate(id, { activo: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
       if (err) {
           return res.status(400).json({
               ok: false,

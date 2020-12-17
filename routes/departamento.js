@@ -3,27 +3,34 @@ const app = express()
 const departamento= require('../models/departamento')
 
 
-app.get('/departamento', function (req, res) {
-  departamento.find({}).exec((err,departamento)=>{
-      if(err){
-          return res.status(400).json({
-              ok: false,
-              msg:'ocurrio un error al consultar',
-              err
-          })
-      }
-      res.json ({
-        ok: true,
-        msg: 'lista obtenida con exito',
-        conteo: departamento.length,
-        departamento
-      })
-  })
-})
+app.get('/departamento/:id', (req, res) => {
+
+  let idDepartamento = req.params.id;
+
+  departamento.findById({ _id: idDepartamento })
+      .populate('empleado', 'id_jefe_area')
+      .exec((err, departamento) => {
+          if (err) {
+              return res.status(400).json({
+                  ok: false,
+                  msg: 'Ocurrio un error al listar las categorias',
+                  err
+              });
+          }
+
+          res.json({
+              ok: true,
+              msg: ' listada con exito',
+              conteo: departamento.length,
+              departamento
+          });
+      });
+
+});
+
 app.post('/departamento',function(req,res){
     let body= req.body;
 let dep = new departamento({
-    _id: body._id,
     id_jefe_de_area:body.id_jefe_de_area,
     nombre: body.nombre,
     numero_empleados: body.numero_empleados,
@@ -49,7 +56,7 @@ if (err){
 })
 app.put('/departamento/:id', function(req, res) {
   let id = req.params.id;
-  let body = _.pick(req.body, ['descripcion', 'usuario']);
+  let body = _.pick(req.body, ['nombre', 'extension_telefonica']);
 
   departamento.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
       (err, depDB) => {
@@ -70,7 +77,7 @@ app.put('/departamento/:id', function(req, res) {
 app.delete('/departamento/:id', function(req, res) {
 
   let id = req.params.id;
-  deparmento.findByIdAndUpdate(id, { disponible: false }, { new: true, runValidators: true, context: 'query' }, (err, depDB) => {
+  deparmento.findByIdAndUpdate(id, { activo: false }, { new: true, runValidators: true, context: 'query' }, (err, depDB) => {
       if (err) {
           return res.status(400).json({
               ok: false,
