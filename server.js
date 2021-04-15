@@ -5,12 +5,14 @@ const app = express()
 const bodyParser= require('body-parser')
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
-const routes1 = require('./routes/departamento',);
-const routes2 = require('./routes/empleado',);
+const routes1 = require('./routes/categorias',);
+const routes2 = require('./routes/productos',);
 const routes3 = require('./routes/usuario',);
+const routes4= require('./routes/login')
 app.use(routes1);
 app.use(routes2);
 app.use(routes3);
+app.use(routes4);
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -32,7 +34,7 @@ app.get('/', function (req, res) {
 })
 
 
-   mongoose.connect('mongodb://localhost:27017/bd',{
+   mongoose.connect('mongodb+srv://admin2:I4ONNs5L2CX9oJMg@cluster0.te1yj.mongodb.net/Starbucks',{
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,

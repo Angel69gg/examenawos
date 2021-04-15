@@ -1,6 +1,9 @@
 const express = require('express')
+const _= require ('underscore')
 const app = express()
 const usuario= require('../models/usuario')
+const bycrypt= require('bcrypt')
+
 
 
 app.get('/usuario/:id', (req, res) => {
@@ -26,18 +29,19 @@ app.get('/usuario/:id', (req, res) => {
         });
   
   });
-app.post('/usuario',function(req,res){
+app.post('/usuarios',function(req,res){
     let body= req.body;
 let usr= new usuario({
     
     nombre:body.nombre,
-    primer_apellido: body.primer_apellido,
-    segundo_apellido: body.segundo_apellido,
-    edad: body.edad,
-    curp: body.curp,
-    telefono:body.telefono,
-    mail: body.mail,
-    activo: body.activo
+    email: body.email,
+    password: bycrypt.hashSync(body.password,10),
+    google: body.google,
+    role: body.role,
+    img:body.img,
+    estado: body.estado,
+   
+  
   });
   usr.save((err,usrDB)=>{
 if (err){
@@ -47,20 +51,18 @@ if (err){
       err
  })
 }
-
-
     res.json({
         ok: true,
-          mensaje: 'Producto Insertado con exito',
+          mensaje: 'Usuario Insertado con exito',
           usrDB
     })
   })
 })
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuarios/:id', function(req, res) {
   let id = req.params.id;
-  let body = _.pick(req.body, ['nombre', 'primer_apellido','segundo_apellido','edad','curp','telefono','mail']);
+  let body = _.pick(req.body, ['nombre', 'email','google','role','img','estado']);
 
-  empleado.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
+  usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' },
       (err, usrDB) => {
           if (err) {
               return res.status(400).json({
@@ -76,10 +78,10 @@ app.put('/usuario/:id', function(req, res) {
           });
       });
 });
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuarios/:id', function(req, res) {
 
   let id = req.params.id;
-  usuario.findByIdAndUpdate(id, { activo: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
+  usuario.findByIdAndUpdate(id, { estado: false }, { new: true, runValidators: true, context: 'query' }, (err, usrDB) => {
       if (err) {
           return res.status(400).json({
               ok: false,
@@ -89,7 +91,7 @@ app.delete('/usuario/:id', function(req, res) {
       }
       res.json({
           ok: true,
-          msg: 'Porducto eliminado con exito',
+          msg: 'usuario eliminado con exito',
           usrDB
 
       });

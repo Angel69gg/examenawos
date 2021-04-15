@@ -2,29 +2,26 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 let usuarioSchema= new Schema ({
 
+
 nombre:{
     type: String
 },
-primer_apellido:{
+email:{
     type: String
 },
-segundo_apellido:{
+password:{
     type: String
 },
-edad:{
-    type: Number
+google:{
+    type: Boolean
 },
-curp:{
+role:{
     type: String,
-    unique: true
 },
-telefono:{
-    type: Number
-},
-mail:{
+img:{
     type: String
 },
-activo:{
+estado:{
     type: Boolean
 }
 
